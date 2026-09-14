@@ -106,12 +106,13 @@ remaining_lease = st.number_input(
 )
 
 
-transact_year = st.number_input(
-    "Transaction Year",
-    min_value=2007,
-    max_value=2016,
-    value=2016,
-    step=1
+projection_year = st.number_input(
+    "Projection Year",
+    min_value=2017,
+    max_value=2026,
+    value=None,
+    step=1,
+    placeholder="Enter year (2017–2026)"
 )
 
 
@@ -132,7 +133,7 @@ if st.button("🔮 Predict Resale Price", use_container_width=True):
         "flat_model": [flat_model],
         "floor_area_sqm": [floor_area_sqm],
         "remaining_lease": [remaining_lease],
-        "transact_year": [transact_year]
+        "transact_year": [projection_year]
     })
 
     # Make prediction
@@ -152,22 +153,28 @@ if st.button("🔮 Predict Resale Price", use_container_width=True):
         value=f"${predicted_price:,.0f}"
     )
 
-
+st.caption(
+    "Disclaimer: The model was trained using historical HDB resale "
+    "transactions from 2000–2016. Predictions for 2017–2026 are "
+    "model-based projections and should not be interpreted as actual "
+    "historical transaction prices. Projection uncertainty increases "
+    "for years further beyond the training period."
+)
     # ======================================
     # Show input summary
     # ======================================
 
-    st.subheader("Prediction Details")
+st.subheader("Prediction Details")
 
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-    with col1:
-        st.write(f"**Flat Type:** {flat_type}")
-        st.write(f"**Town:** {town}")
-        st.write(f"**Storey:** {storey_range}")
-        st.write(f"**Flat Model:** {flat_model}")
+with col1:
+    st.write(f"**Flat Type:** {flat_type}")
+    st.write(f"**Town:** {town}")
+    st.write(f"**Storey:** {storey_range}")
+    st.write(f"**Flat Model:** {flat_model}")
 
-    with col2:
-        st.write(f"**Floor Area:** {floor_area_sqm:.0f} sqm")
-        st.write(f"**Remaining Lease:** {remaining_lease:.0f} years")
-        st.write(f"**Transaction Year:** {transact_year}")
+with col2:
+    st.write(f"**Floor Area:** {floor_area_sqm:.0f} sqm")
+    st.write(f"**Remaining Lease:** {remaining_lease:.0f} years")
+    st.write(f"**Projection Year:** {projection_year}")
